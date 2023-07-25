@@ -18,9 +18,19 @@ const data = require("./data/weather.json");
 // }
 
 function filterCityByCoOrds(latQuery, lonQuery) {
-  const result = data.find(
+  const searchedCity = data.find(
     (city) => city.lat == latQuery && city.lon == lonQuery
   );
+
+  const result = searchedCity.data.map((day) => {
+    return {
+      description: `Low of ${day.low_temp}, high of ${
+        day.max_temp
+      } with ${day.weather.description.toLowerCase()}`,
+      date: day.datetime,
+    };
+  });
+
   return result;
 }
 
