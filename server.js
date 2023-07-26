@@ -18,10 +18,14 @@ const data = require("./data/weather.json");
 // }
 
 function filterCityByCoOrds(latQuery, lonQuery) {
+  console.log("lat", parseFloat(latQuery).toFixed(2));
+  console.log("lon", parseFloat(lonQuery).toFixed(2));
   const searchedCity = data.find(
-    (city) => city.lat == latQuery && city.lon == lonQuery
+    (city) =>
+      parseFloat(city.lat).toFixed() == parseFloat(latQuery).toFixed() &&
+      parseFloat(city.lon).toFixed() == parseFloat(lonQuery).toFixed()
   );
-
+  console.log(searchedCity);
   const result = searchedCity.data.map((day) => {
     return {
       description: `Low of ${day.low_temp}, high of ${
@@ -35,12 +39,12 @@ function filterCityByCoOrds(latQuery, lonQuery) {
 }
 
 app.get("/", (req, res) => {
-  res.json("Hey good lookin");
+  res.json("This is the root page");
 });
 
 app.get("/weather", (req, res) => {
   let dataToReturn;
-
+  console.log(req.query);
   if (req.query.lat && req.query.lon) {
     dataToReturn = filterCityByCoOrds(req.query.lat, req.query.lon);
   }
