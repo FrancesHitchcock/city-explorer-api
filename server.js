@@ -12,30 +12,26 @@ app.use(cors());
 
 const data = require("./data/weather.json");
 
-// function filterCityByLat(latQuery) {
-//   const result = data.filter((city) => city.lat == latQuery);
-//   return result;
-// }
-
 function filterCityByCoOrds(latQuery, lonQuery) {
-  console.log("lat", parseFloat(latQuery).toFixed(2));
-  console.log("lon", parseFloat(lonQuery).toFixed(2));
-  const searchedCity = data.find(
-    (city) =>
-      parseFloat(city.lat).toFixed() == parseFloat(latQuery).toFixed() &&
-      parseFloat(city.lon).toFixed() == parseFloat(lonQuery).toFixed()
-  );
-  console.log(searchedCity);
-  const result = searchedCity.data.map((day) => {
-    return {
-      description: `Low of ${day.low_temp}, high of ${
-        day.max_temp
-      } with ${day.weather.description.toLowerCase()}`,
-      date: day.datetime,
-    };
-  });
+  try {
+    const searchedCity = data.find(
+      (city) =>
+        parseFloat(city.lat).toFixed() == parseFloat(latQuery).toFixed() &&
+        parseFloat(city.lon).toFixed() == parseFloat(lonQuery).toFixed()
+    );
+    const result = searchedCity.data.map((day) => {
+      return {
+        description: `Low of ${day.low_temp}, high of ${
+          day.max_temp
+        } with ${day.weather.description.toLowerCase()}`,
+        date: day.datetime,
+      };
+    });
 
-  return result;
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 app.get("/", (req, res) => {
